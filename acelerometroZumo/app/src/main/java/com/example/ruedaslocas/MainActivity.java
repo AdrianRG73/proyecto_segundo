@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (bluetoothAdapter == null) {
+            Toast.makeText(this, "No tienes Bluethooth XD", Toast.LENGTH_SHORT).show();
         }
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
@@ -172,39 +173,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         txtY.setText("Y: " + String.valueOf(y));
         txtZ.setText("Z: " + String.valueOf(z));
 
-        if (y > 8) {
-            btnDown.setBackgroundColor(Color.GREEN);
+        if (y > 5) {
             msg="3";
             btnDown.performClick();
 
         } else {
-            btnDown.setBackgroundColor(Color.WHITE);
         }
 
-        if (y < -8) {
-            btnUp.setBackgroundColor(Color.GREEN);
+        if (y < -5) {
             msg="1";
             btnUp.performClick();
 
-
         } else {
-            btnUp.setBackgroundColor(Color.WHITE);
         }
 
-        if (x > 8) {
-            btnLeft.setBackgroundColor(Color.GREEN);
+        if (x > 5) {
             btnLeft.performClick();
             msg="2";
         } else {
-            btnLeft.setBackgroundColor(Color.WHITE);
         }
 
-        if (x < -8) {
-            btnRight.setBackgroundColor(Color.GREEN);
+        if (x < -5) {
             btnRight.performClick();
             msg="4";
         } else {
-            btnRight.setBackgroundColor(Color.WHITE);
         }
     }
 
