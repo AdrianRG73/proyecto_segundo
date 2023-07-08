@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         btnConnectBluetooth = findViewById(R.id.btnConnectBluetooth);
         btnUp = findViewById(R.id.btnUp);
         btnDown = findViewById(R.id.btnDown);
@@ -74,15 +74,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (bluetoothAdapter == null) {
-            Toast.makeText(this, "No tienes Bluethooth XD", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No tienes Bluetooth XD", Toast.LENGTH_SHORT).show();
         }
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+            // Si no se tienen los permisos, solicitarlos al usuario
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN}, REQUEST_BLUETOOTH_PERMISSION);
         }
 
         if (!bluetoothAdapter.isEnabled()) {
+            // Si el Bluetooth está deshabilitado, solicitar al usuario que lo habilite
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
@@ -98,8 +100,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
         } else {
-            Toast.makeText(this, "El dispositivo no tiene sensor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No tienes Sensor", Toast.LENGTH_SHORT).show();
         }
 
         btnUp.setBackgroundColor(Color.WHITE);
@@ -173,30 +176,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         txtY.setText("Y: " + String.valueOf(y));
         txtZ.setText("Z: " + String.valueOf(z));
 
-        if (y > 5) {
+        if (y > 4) {
+            btnDown.setBackgroundColor(Color.YELLOW);
             msg="3";
             btnDown.performClick();
-
         } else {
+            btnDown.setBackgroundColor(Color.WHITE);
         }
-
-        if (y < -5) {
+        if (y < -4) {
+            btnUp.setBackgroundColor(Color.YELLOW);
             msg="1";
             btnUp.performClick();
-
         } else {
+            btnUp.setBackgroundColor(Color.WHITE);
         }
-
-        if (x > 5) {
+        if (x > 4) {
+            btnLeft.setBackgroundColor(Color.YELLOW);
             btnLeft.performClick();
             msg="2";
         } else {
+            btnLeft.setBackgroundColor(Color.WHITE);
         }
-
-        if (x < -5) {
+        if (x < -4) {
+            btnRight.setBackgroundColor(Color.YELLOW);
             btnRight.performClick();
             msg="4";
         } else {
+            btnRight.setBackgroundColor(Color.WHITE);
         }
     }
 
@@ -217,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Buethooth");
+            builder.setTitle("Selecciona un Bluetooth");
             builder.setCancelable(true);
 
             CharSequence[] deviceNames = new CharSequence[deviceList.size()];
@@ -227,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
                 deviceNames[i] = deviceList.get(i).getName();
             }
+
             builder.setItems(deviceNames, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -248,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             AlertDialog dialog = builder.create();
             dialog.show();
         } else {
-            Toast.makeText(this, "Prende el Bluetooth", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No hay dispositivos ", Toast.LENGTH_SHORT).show();
         }
     }
     private void sendBluetoothCommand(String command) {
@@ -258,11 +265,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 outputStream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Error al enviar el comando", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error ", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "No hay dispositivos conectados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No hay conexión ", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
